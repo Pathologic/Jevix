@@ -1,8 +1,6 @@
 <?php
+if(empty($input) && empty($inputField)) return '';
 
-if(empty($input)) return '';
-//$params = array_filter($params);
-var_dump($params);
 include_once (MODX_BASE_PATH . 'assets/snippets/DocLister/lib/jsonHelper.class.php');
 include_once (MODX_BASE_PATH . 'assets/snippets/Jevix/core/jevix.class.php');
 if (!empty($options) && is_string($options) && $options[0] == '{') {
@@ -26,6 +24,10 @@ if (file_exists($config) && is_readable($config)) {
 } 
 if (is_array($tmp)) $params = array_merge($tmp,$params);
 $Jevix = new Jevix($modx, $params);
+if (!empty($inputField) && isset($modx->documentObject[$inputField])) {
+    $input = is_array($modx->documentObject[$inputField]) ? $modx->documentObject[$inputField][1] : $modx->documentObject[$inputField];
+}
+
 $processed = $Jevix->process($input);
 
 if (!empty($params['escapeTags'])) {
